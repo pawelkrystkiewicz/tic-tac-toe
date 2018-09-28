@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Tic-tac-toe</title>
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+    <link rel="stylesheet" href="./tic-tac-toe-style.css" type="text/css">
+    <script src="./tic-tac-toe-script.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <button onclick="restartGameFunction()">Reset</button>
+        <fieldset>
+            <legend>Score board</legend>
+            Message:<div class="msg" id="msg">...</div>
+            User:<div class="user-score" id="user-score">0</div>
+            NPC:<div class="npc-score" id="npc-score">0</div>
+            USER:<div class="user-score-matrix" id="user-score-matrix">-</div>
+            NPC:<div class="npc-score-matrix" id="npc-score-matrix">-</div>
+            GAME:<div class="game-state-matrix" id="game-state-matrix">-</div>
+        </fieldset>
+        <div class="grid-container">
+            <div class="grid__panel" id="grid-1">
+                <label id="1" onclick="clickHandlerFunction(this.id)"></label>
+            </div>
+            <div class="grid__panel" id="grid-2">
+
+                <label id="2" onclick="clickHandlerFunction(this.id)"></label>
+            </div>
+            <div class="grid__panel" id="grid-3">
+
+                <label id="3" onclick="clickHandlerFunction(this.id)"></label>
+            </div>
+            <div class="grid__panel" id="grid-4">
+
+
+                <label id="4" onclick="clickHandlerFunction(this.id)"></label>
+            </div>
+            <div class="grid__panel" id="grid-5">
+
+                <label id="5" onclick="clickHandlerFunction(this.id)"></label>
+            </div>
+            <div class="grid__panel" id="grid-6">
+
+                <label id="6" onclick="clickHandlerFunction(this.id)"></label>
+            </div>
+            <div class="grid__panel" id="grid-7">
+                <label id="7" onclick="clickHandlerFunction(this.id)"></label>
+            </div>
+            <div class="grid__panel" id="grid-8">
+
+                <label id="8" onclick="clickHandlerFunction(this.id)"></label>
+            </div>
+            <div class="grid__panel" id="grid-9">
+
+                <label id="9" onclick="clickHandlerFunction(this.id)"></label>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <footer>
+        <h6>&COPY; Pawel Krystkiewicz 2018</h6>
+    </footer>
+</body>
+
+</html>

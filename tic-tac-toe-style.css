@@ -35,11 +35,6 @@ body {
     border: 1px solid white;
 }
 
-
-input[type="checkbox"] {
-    display: none;
-}
-
 label {
     background: rgba(255, 255, 255, 0.1);
     width: 100%;
@@ -80,4 +75,8 @@ footer {
     position: absolute;
     bottom: 0;
     text-align: center;
+}
+
+#msg{
+font-weight: bold;
 }
