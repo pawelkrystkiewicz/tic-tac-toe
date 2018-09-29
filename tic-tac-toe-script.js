@@ -3,36 +3,16 @@ let gameMode = "npc";
 let gameState = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let player1Score = [];
 let player2Score = [];
+let player2MoveCount = 0;
 const winCondition = [
-    [1, 2, 3],
+    [1, 2, 3], //horizontals
     [4, 5, 6],
     [7, 8, 9],
-    [1, 4, 7],
+    [1, 4, 7], //verticals
     [2, 5, 8],
     [3, 6, 9],
-    [1, 5, 9],
-    [3, 5, 7],
-    [1, 4, 5, 9], //Here begins walkaround
-    [1, 2, 5, 9],
-    [1, 3, 4, 7],
-    [1, 3, 5, 9],
-    [1, 5, 6, 9],
-    [1, 5, 7, 9],
-    [1, 5, 7, 8],
-    [1, 4, 5, 7],
-    [2, 3, 6, 8],
-    [2, 4, 6, 8],
-    [2, 5, 6, 8],
-    [3, 6, 8, 9],
-    [3, 4, 5, 6],
-    [3, 5, 6, 7],
-    [1, 3, 4, 5, 7],
-    [3, 4, 5, 6, 7],
-    [1, 2, 5, 6, 9],
-    [1, 2, 5, 7, 9],
-    [1, 4, 5, 7, 9],
-    [1, 4, 5, 8, 9],
-    [2, 3, 4, 5, 8]
+    [1, 5, 9], //diagonals
+    [3, 5, 7]
 ];
 /*Globals END */
 
@@ -45,43 +25,57 @@ function restartGameFunction(a = "npc") {
     /*Reset game essential variables */
     player1Score = [];
     player2Score = [];
+    player2MoveCount = 0;
     gameState = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    // Reset score board values
 
+    if (gameMode == "human") {
+        document.getElementById("msg").innerText = "The game is on dear Watson!";
+    } else {
+        document.getElementById("msg").innerText = "Play!";
+    }
+    // Reset score board values
     document.getElementById("player1-matrix").innerText = [0];
     document.getElementById("player2-matrix").innerText = [0];
     document.getElementById("game-state-matrix").innerText = gameState;
-    document.getElementById("msg").innerText = "Game on!";
+    document.getElementById("msg").innerText = "The game is on dear Watson!";
+
+    //if board was locked for click then unlock
     if (document.getElementById("grid-container").classList.contains('prevent-click')) {
         document.getElementById("grid-container").classList.remove('prevent-click');
     }
-    return gameMode
+    return gameMode //update global gameMode
 }
 
 
 //Handle clicked label
 function clickHandlerFunction(e) {
-    e = Number(e);
-    //Check if move can be made
+    e = Number(e); //id to number
+    //Check if move is legal
     if (gameState.includes(e)) {
         let tile = document.getElementById(e);
-        if (gameMode === "human") {
+        if (gameMode === "human") { //if we choose to play with another human
             if (gameState.length % 2 != 0) { //even moves count->Player 1
-                tile.innerText = "X";
-                player1Score.push(e);
-                updateGameStateFunction(e);
+                tile.innerText = "X"; //mark player1 spot with X
+                player1Score.push(e); //update player1 points
+                document.getElementById("msg").innerText = `Your turn PLAYER 2 [O]`;
+                updateGameStateFunction(e); //update game state
+
 
             } else if (gameState.length % 2 == 0) { //odd moves count->Player 2
-                tile.innerText = "O";
-                player2Score.push(e);
-                updateGameStateFunction(e);
+                tile.innerText = "O"; //mark playe2 spot with X
+                player2Score.push(e); //update player2 points
+                document.getElementById("msg").innerText = `Your turn PLAYER 1 [X]`; //add some context
+                player2MoveCount++;
+                updateGameStateFunction(e); //update game state
+
             }
 
-        } else {
-            tile.innerText = "X";
-            player1Score.push(e);
-            updateGameStateFunction(e);
-            player2MoveFunction();
+        } else { //if normal mode(npc) is in effect
+            tile.innerText = "X"; //mark player1 spot as X
+            player1Score.push(e); //update player1 moves
+            document.getElementById("msg").innerText = `Your turn NPC [O]`; //add some context
+            updateGameStateFunction(e); //update game state
+            player2MoveFunction(); //make npc move
         }
     }
 }
@@ -107,51 +101,50 @@ function player2MoveFunction() {
         document.getElementById(randomTile).innerText = "O";
         //update npc score
         player2Score.push(randomTile);
+        //increment move count
+        player2MoveCount++;
+        //show turns
+        document.getElementById("msg").innerText = `Your turn PLAYER 1 [X]`;
         //update game state
         updateGameStateFunction(randomTile);
         //check who wins
-        checkForWinnerFunction();
     }
 };
 
-
+//Function checking for winner or win case like tie
 function checkForWinnerFunction() {
-    let player1;
-    let player2;
-    for (let k = 0; k < winCondition.length; k++) {
-        if (player1Score.sort().join('').includes(winCondition[k].join(''))) {
-            player1 = true;
-            endGameFunction("player 1");
-        } else if (player2Score.sort().join('').includes(winCondition[k].join(''))) {
-            player2 = true;
+    if (player2MoveCount >= 3) {
+        if (findCharsFunction(player1Score) && findCharsFunction(player2Score)) {
+            endGameFunction("tie");
+        } else if (findCharsFunction(player2Score)) {
             endGameFunction("player 2");
+        } else if (findCharsFunction(player1Score)) {
+            endGameFunction("player 1");
         } else if (gameState.length === 0) {
-            endGameFunction('tie');
+            endGameFunction("tie");
         }
     }
-    if (player2 && player1)
-        endGameFunction("tie");
 }
 
+//FUNCTION HANDLING WIN OUTCOMES AND END GAME
 function endGameFunction(arg) {
     document.getElementById("grid-container").classList.add('prevent-click'); //prevent further input on grid
-
     //Show end game message
     if (arg === "tie") {
-        document.getElementById("msg").innerText = (`Game Over!
-        It's a TIE. Press button to start a new game.`);
+        document.getElementById("msg").innerText = (`It's a TIE.
+        Press button to start a new game.`);
     } else {
-        document.getElementById("msg").innerText = (`Game Over!
-    ${arg.toUpperCase()} has won! Press button to start a new game.`);
+        document.getElementById("msg").innerText = (`${arg.toUpperCase()} has won!
+        Press button to start a new game.`);
     }
 }
 
+//FUNCTION UPDATING GAME STATE AND SCORES
 function updateGameStateFunction(e) {
-    gameState = gameState.filter(function (a) {
+    gameState = gameState.filter(function (a) { //new array excludes id of tile that has been played
         return a != e;
     });
     //Update score board
-
     document.getElementById("player1-matrix").innerText = player1Score;
     document.getElementById("player2-matrix").innerText = player2Score;
     document.getElementById("game-state-matrix").innerText = gameState;
@@ -160,9 +153,31 @@ function updateGameStateFunction(e) {
     return gameState;
 }
 
+//FUNCTION CHECKING IF WIN HAS BEEN ACHIEVED
+function findCharsFunction(source, condition = winCondition) {
+    //condition[] is 2D array, loop through every element
+    for (let k = 0; k < condition.length; k++) {
+        //moving on to next condition, clear count
+        let isFound = 0;
+        //loop through every single element in condition[] array
+        for (let j = 0; j < source.length; j++) {
+            //check if source[] includes any single element from condition sub array[]
+            if (source.includes(condition[k][j])) {
+                //we are looking from 3 matches for win so increment value if true:
+                isFound++;
+                if (isFound == 3) { //if found 3 matches it's a win, function
+                    return true
+                }
+            }
+        }
+    }
+    return false //if previous condition wasn't caught as true then there is no match, return case false
+}
+
 
 function autorun() {
-    restartGameFunction("npc");
+    //restartGameFunction("npc");
+
 }
 if (document.addEventListener) document.addEventListener("DOMContentLoaded", autorun, false);
 else if (document.attachEvent) document.attachEvent("onreadystatechange", autorun);
