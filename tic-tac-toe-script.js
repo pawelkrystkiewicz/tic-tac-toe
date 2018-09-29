@@ -113,7 +113,7 @@ function player2MoveFunction() {
 
 //Function checking for winner or win case like tie
 function checkForWinnerFunction() {
-    if (player2MoveCount >= 3) {
+    if (player2MoveCount >= 2) {
         if (findCharsFunction(player1Score) && findCharsFunction(player2Score)) {
             endGameFunction("tie");
         } else if (findCharsFunction(player2Score)) {

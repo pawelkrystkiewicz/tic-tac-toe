@@ -1,3 +1,3 @@
-TIC TAC TOE 0.2.4
+TIC TAC TOE 1.0.0
 ======
 
