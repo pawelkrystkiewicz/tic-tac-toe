@@ -28,21 +28,30 @@ function restartGameFunction(a = "npc") {
     player2MoveCount = 0;
     gameState = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-    if (gameMode == "human") {
-        document.getElementById("msg").innerText = "The game is on dear Watson!";
-    } else {
-        document.getElementById("msg").innerText = "Play!";
-    }
+    //message to user
+    document.getElementById("msg").innerText = "Play!";
+
     // Reset score board values
     document.getElementById("player1-matrix").innerText = [0];
     document.getElementById("player2-matrix").innerText = [0];
     document.getElementById("game-state-matrix").innerText = gameState;
-    document.getElementById("msg").innerText = "The game is on dear Watson!";
 
     //if board was locked for click then unlock
     if (document.getElementById("grid-container").classList.contains('prevent-click')) {
         document.getElementById("grid-container").classList.remove('prevent-click');
     }
+
+    if (document.getElementById("grid-container").classList.contains('hide-element')) {
+        document.getElementById("grid-container").classList.remove('hide-element');
+    }
+
+    if (document.getElementById("grid-container").classList.contains('blur-element')) {
+        document.getElementById("grid-container").classList.remove('blur-element');
+    }
+
+    document.getElementById("score").style.visibility = "unset";
+    document.getElementById("game-options").classList.add('hide-element');
+
     return gameMode //update global gameMode
 }
 
@@ -79,17 +88,6 @@ function clickHandlerFunction(e) {
         }
     }
 }
-
-/*
-To simulate second player's move:
-1. check if there are any tiles to chose else exit
-2. generate random number from range that is count of figures left in array
-3. use this number to be index of array so there certainty that this tile is available
-4. mark chosen tile
-5. update npc score
-6. update gameState
-7. check if there is already a winner
-*/
 
 function player2MoveFunction() {
     if (gameState.length > 0) {
@@ -129,6 +127,12 @@ function checkForWinnerFunction() {
 //FUNCTION HANDLING WIN OUTCOMES AND END GAME
 function endGameFunction(arg) {
     document.getElementById("grid-container").classList.add('prevent-click'); //prevent further input on grid
+    document.getElementById("grid-container").classList.add('blur-element'); //hide element
+
+    if (document.getElementById("game-options").classList.contains('hide-element')) {
+        document.getElementById("game-options").classList.remove('hide-element');
+    }
+
     //Show end game message
     if (arg === "tie") {
         document.getElementById("msg").innerText = (`It's a TIE.
@@ -136,6 +140,7 @@ function endGameFunction(arg) {
     } else {
         document.getElementById("msg").innerText = (`${arg.toUpperCase()} has won!
         Press button to start a new game.`);
+
     }
 }
 
@@ -173,12 +178,3 @@ function findCharsFunction(source, condition = winCondition) {
     }
     return false //if previous condition wasn't caught as true then there is no match, return case false
 }
-
-
-function autorun() {
-    //restartGameFunction("npc");
-
-}
-if (document.addEventListener) document.addEventListener("DOMContentLoaded", autorun, false);
-else if (document.attachEvent) document.attachEvent("onreadystatechange", autorun);
-else window.onload = autorun;
