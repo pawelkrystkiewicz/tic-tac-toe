@@ -1,27 +1,27 @@
-TIC TAC TOE 
+TIC TAC TOE
 ======
 ##### v1.0.0
 
 ## Design brief
    Main goal was to create tic-tac-toe game as JavaScript web application.
-   
+
    Game grid consists of HTML label tags with structure and numerical `id`'s as shown below:
 
  **1** | **2** | **3**
  :---: |:---:| :---:
- **4** | **5** | **6** 
+ **4** | **5** | **6**
  **7** | **8** | **9**
-  
+
    This solution utilizes arrays to store:
    + numerical `id` of grid tiles avalaible for players next move: `[1,2,3,4,5,6,7,8,9]`,
    + `id` of tiles clicked by player or picked by NPC,
    + win conditions as tiles `id`. e.g. `winCondition[0]=[1,2,3]` is a win condition for scratched top row:
-   
+
  ~~**1**~~ | ~~**2**~~ | ~~**3**~~
  :---: |:---:| :---:
- **4** | **5** | **6** 
+ **4** | **5** | **6**
  **7** | **8** | **9**
- 
+
  ### Game flow
  One game cycle against NPC can be described as following procedure:  
  0. All variables are set to default for a new game, grid is unlocked for click,
@@ -38,7 +38,7 @@ TIC TAC TOE
  6. `gameState` is update by removing selected `id`,
  7. after udpdating game state check for winner is performed if Player 2 or NPC has made at least 2 moves,
  8. if winner is not yet found and there are tiles left in `gameState` script awaits for click to execute point 1.
- 
+
 #### Game with Human
 If game against Human is selected then Player 2 (NPC) variables are utilized for game state tracking.
 In this scenario every even click is assumed to made by Player 2 and marks tiles with **O** and every odd
@@ -100,4 +100,4 @@ Following is happening:
 15. Exit function with `return true`
 
 #### Input lock
-This is simply achieved by asigning CSS class to an element with attribute `pointer-events: none`.
+This is simply achieved by assigning CSS class to an element with attribute `pointer-events: none`.
